@@ -13,22 +13,27 @@ class PublishedArticleManager(models.Manager):
 
 class Article(models.Model):
     STATUS = (
-        ('draft', 'Draft'),
-        ('publish', 'Publish'),
+        ('draft', 'درحال توسعه'),
+        ('publish', 'منتشر شده'),
     )
 
-    title = models.CharField(max_length=150, unique=True)
-    slug = models.SlugField(max_length=150, unique=True)
-    writer = models.ForeignKey(User, on_delete=models.CASCADE)
-    body = models.TextField()
-    created = models.DateTimeField(auto_now_add=True)
-    published = models.DateTimeField(default=timezone.now)
-    updated = models.DateTimeField(auto_now=True)
-    status = models.CharField(max_length=20, choices=STATUS, default='draft')
+    title = models.CharField(max_length=150, unique=True, verbose_name='عنوان')
+    slug = models.SlugField(max_length=150, unique=True, verbose_name='آدرس مقاله')
+    writer = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='نویسنده')
+    body = models.TextField(verbose_name='متن مقاله')
+    created = models.DateTimeField(auto_now_add=True, verbose_name='زمان ایجاد')
+    published = models.DateTimeField(default=timezone.now, verbose_name='زمان انتشار')
+    updated = models.DateTimeField(auto_now=True, verbose_name='زمان آپدیت')
+    status = models.CharField(max_length=20, choices=STATUS, default='draft', verbose_name='وضعیت')
     
     # customize Manager
     objects = models.Manager() # active default manager
     publish_filter = PublishedArticleManager() # customize manager
+
+
+    class Meta:
+        verbose_name = 'مقاله'
+        # verbose_name_plurall = 'مقاله ها'
 
 
     def __str__(self):

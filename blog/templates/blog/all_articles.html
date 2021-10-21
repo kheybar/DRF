@@ -2,13 +2,22 @@
 
 {% block content %}
 
+<h3>
+    مقاله ها
+</h3>
     <div class="card">
         {% for article in all_articles %}
 
             <a href="{{ article.get_absolute_url }}"class="card-body">
-                {{ article.title }}
+                <p style="font-size:25px">{{ article.title }}</p>
             </a>
-            
+            {% if request.user.is_authenticated %}
+            <div dir="rtl" class="col-md-4 col-sm-4">
+                <a href="{% url 'blog:article_delete' article.id %}" class="btn btn-danger">پاک کردن</a>
+                <a href="{% url 'blog:article_update' article.id %}" class="btn btn-primary">بروزرسانی</a>
+            </div>
+            {% endif %}
+            <hr>
         {% empty %}
 
             <p>no Article!!!</p>

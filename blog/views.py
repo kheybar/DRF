@@ -1,13 +1,57 @@
-from django.core.checks.messages import Error
-from django.shortcuts import render, get_object_or_404
+from django.views import generic
+from django.urls import reverse_lazy
+from django.contrib import messages
+from django.utils.text import slugify
 from .models import Article
 
 
-def all_articles(request):
-    article = Article.publish_filter.all() # use customize manager
-    return render(request, 'blog/all_articles.html', {'all_articles': article,})
+
+class AllArticle(generic.ListView):
+    queryset = Article.publish_filter.all()
+    template_name = 'blog/all_articles.html'
+    context_object_name = 'all_articles'
+    ordering = ('-created')
 
 
-def article_detail(request, id, slug):
-    article = get_object_or_404(Article, id=id, slug=slug)
-    return render(request, 'blog/article_detail.html', {'article': article})
+
+class ArticleDetail(generic.DetailView):
+    template_name = 'blog/article_detail.html'
+    context_object_name = 'article'
+    def get_queryset(self, **kwargs):
+        return Article.objects.filter(id=self.kwargs['pk'], slug__iexact=self.kwargs['slug'])
+
+
+
+class ArticleCreate(generic.CreateView):
+    model = Article
+    fields = ('title', 'slug', 'body')
+    success_url = reverse_lazy('blog:all_articles')
+    template_name = 'blog/article_create.html'
+
+    def form_valid(self, form):
+        article = form.save(commit=False)
+        article.writer = self.request.user
+        article.status = 'publish'
+        article.save()
+        messages.success(self.request, 'your article create.', extra_tags='success')
+        return super().form_valid(form)
+
+
+
+class ArticleDelete(generic.DeleteView):
+    model = Article
+    template_name = 'blog/article_delete.html'
+    success_url = reverse_lazy('blog:all_articles')
+
+
+
+class ArticleUpdate(generic.UpdateView):
+    model = Article
+    fields = ('title', 'body')
+    template_name = 'blog/article_update.html'
+    success_url = reverse_lazy('blog:all_articles')
+    
+    def form_valid(self, form):
+        article = form.save()
+        messages.success(self.request, 'مقاله شما با موفقیت بروزرسانی شد', extra_tags='success')
+        return super().form_valid(form)
