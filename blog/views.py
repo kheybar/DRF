@@ -4,6 +4,10 @@ from django.contrib import messages
 from django.utils.text import slugify
 from .models import Article
 
+# API
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
 
 
 class AllArticle(generic.ListView):
@@ -55,3 +59,20 @@ class ArticleUpdate(generic.UpdateView):
         article = form.save()
         messages.success(self.request, 'مقاله شما با موفقیت بروزرسانی شد', extra_tags='success')
         return super().form_valid(form)
+
+
+
+
+# API
+
+@api_view(['GET', 'POST']) # Accept Methods
+def response_api(request):
+    """
+        this function for test and use Response Method.
+    """
+    if request.method == 'POST':
+        name = request.data['name'] # deserialize
+        return Response({'name': f'your name is {name}'}) # serialize
+
+    elif request.method == 'GET':
+        return Response({'name': 'Boss'}) # serialize
