@@ -41,6 +41,17 @@ class Article(models.Model):
 
 
 
+class TestSerializer(models.Model):
+    title = models.CharField(max_length=100)
+    email = models.EmailField()
+    age = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return self.title
+
+
+
+
 
 
 

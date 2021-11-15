@@ -11,5 +11,7 @@ urlpatterns = [
     path('<int:pk>/<slug:slug>/', views.ArticleDetail.as_view(), name='article_detail'),
 
     # API
-    path('api/blog/', views.response_api, name='response_api'),
+    path('api/response_api/', views.response_api),
+    path('api/test_serializer/', views.test_serializer),
+    path('api/article/', views.AllArticleApi.as_view()),
 ]
