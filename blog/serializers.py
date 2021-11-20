@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 
 class ArticleSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     title = serializers.CharField()
     slug = serializers.SlugField()
     body = serializers.CharField()

@@ -2,6 +2,7 @@ from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.utils.text import slugify
+from django.shortcuts import get_object_or_404
 from .models import Article, TestSerializer
 
 # API
@@ -94,6 +95,15 @@ def test_serializer(request):
 class AllArticleApi(APIView):
     
     def get(self, request, format=None):
-        article = Article.objects.all()
-        serialize_article = ArticleSerializer(article, many=True)
+        articles = Article.objects.all()
+        serialize_articles = ArticleSerializer(articles, many=True)
+        return Response(serialize_articles.data)
+
+
+
+class ArticleApi(APIView):
+
+    def get(self, request, format=None, **kwargs):
+        article = get_object_or_404(Article, id=self.kwargs['article_id'])
+        serialize_article = ArticleSerializer(article)
         return Response(serialize_article.data)
