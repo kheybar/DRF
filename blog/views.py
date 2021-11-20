@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.utils.text import slugify
 from django.shortcuts import get_object_or_404
-from .models import Article, TestSerializer
+from .models import Article
 
 # API
 from rest_framework.response import Response
@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 
 
 # Serializer
-from .serializers import ArticleSerializer, TestsSerializer
+from .serializers import ArticleSerializer
 
 
 
@@ -82,13 +82,6 @@ def response_api(request):
 
     elif request.method == 'GET':
         return Response({'name': 'Boss'}) # serialize
-
-
-@api_view()
-def test_serializer(request):
-    db_info = TestSerializer.objects.all()
-    serialize_info = TestsSerializer(db_info, many=True)
-    return Response(serialize_info.data)
 
 
 

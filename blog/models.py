@@ -38,20 +38,5 @@ class Article(models.Model):
     def get_absolute_url(self):
         return reverse('blog:article_detail', args=(self.id, self.slug))
 
-
-
-
-class TestSerializer(models.Model):
-    title = models.CharField(max_length=100)
-    email = models.EmailField()
-    age = models.PositiveSmallIntegerField()
-
-    def __str__(self):
-        return self.title
-
-
-
-
-
-
-
+    def writer_name(self):
+        return f'{self.writer.first_name} {self.writer.last_name}'

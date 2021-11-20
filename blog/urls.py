@@ -12,7 +12,6 @@ urlpatterns = [
 
     # API
     path('api/response_api/', views.response_api),
-    path('api/test_serializer/', views.test_serializer),
     path('api/articles/', views.AllArticleApi.as_view()),
     path('api/article/<int:article_id>/', views.ArticleApi.as_view()),
 ]

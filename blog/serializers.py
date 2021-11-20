@@ -1,16 +1,8 @@
 from rest_framework import serializers
+from .models import Article
 
 
-
-class ArticleSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    title = serializers.CharField()
-    slug = serializers.SlugField()
-    body = serializers.CharField()
-
-
-
-class TestsSerializer(serializers.Serializer):
-    title = serializers.CharField()
-    email = serializers.EmailField()
-    age = serializers.IntegerField()
+class ArticleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Article
+        fields = ('id', 'writer_name', 'title', 'body')
