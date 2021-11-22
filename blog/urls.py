@@ -14,4 +14,5 @@ urlpatterns = [
     path('api/response_api/', views.response_api),
     path('api/articles/', views.AllArticleApi.as_view()),
     path('api/article/<int:article_id>/', views.ArticleApi.as_view()),
+    path('api/article/create/', views.ArticleCreateApi.as_view()),
 ]

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -9,6 +10,8 @@ from .models import Article
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
+from rest_framework import status
+
 
 
 # Serializer
@@ -90,7 +93,7 @@ class AllArticleApi(APIView):
     def get(self, request, format=None):
         articles = Article.objects.all()
         serialize_articles = ArticleSerializer(articles, many=True)
-        return Response(serialize_articles.data)
+        return Response(serialize_articles.data, status=status.HTTP_200_OK)
 
 
 
@@ -99,4 +102,20 @@ class ArticleApi(APIView):
     def get(self, request, format=None, **kwargs):
         article = get_object_or_404(Article, id=self.kwargs['article_id'])
         serialize_article = ArticleSerializer(article)
-        return Response(serialize_article.data)
+        return Response(serialize_article.data, status=status.HTTP_200_OK)
+
+
+
+class ArticleCreateApi(APIView):
+    def post(self, request):
+        info = ArticleSerializer(data=request.data)
+        if info.is_valid():
+            Article.objects.create(
+                title=info.validated_data['title'],
+                slug=slugify(info.validated_data['title']),
+                writer=User.objects.get(id=1),
+                body=info.validated_data['body'],
+            )
+            return Response({'status': 'Ok'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(info.errors, status=status.HTTP_400_BAD_REQUEST)
