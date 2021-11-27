@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.permissions import IsAdminUser
 
 
 
@@ -107,6 +108,9 @@ class ArticleApi(APIView):
 
 
 class ArticleCreateApi(APIView):
+    permission_classes = [
+        IsAdminUser,
+        ]
     def post(self, request):
         info = ArticleSerializer(data=request.data)
         if info.is_valid():
