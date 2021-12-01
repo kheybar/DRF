@@ -17,7 +17,7 @@ from .models import Article
 
 
 
-class ArticleViewset(viewsets.viewSet):
+class ArticleViewset(viewsets.ViewSet):
     
     def list(self, request):
         queryset = Article.objects.all()
@@ -25,7 +25,6 @@ class ArticleViewset(viewsets.viewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, pk=None):
-        queryset = Article.objects.all()
         article = get_object_or_404(Article, pk=pk)
         serializer = ArticleSerializer(article)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -33,7 +32,12 @@ class ArticleViewset(viewsets.viewSet):
     def create(self, request):
         serializer = ArticleSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            Article.objects.create(
+                title=serializer.validated_data['title'],
+                slug=slugify(serializer.validated_data['title']),
+                writer=User.objects.get(id=1),
+                body=serializer.validated_data['body'],
+            )
             return Response({'messages': 'Ok'}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -52,3 +56,4 @@ class ArticleViewset(viewsets.viewSet):
 
     def destroy(self, request, pk=None):
         pass
+        
