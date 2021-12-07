@@ -17,43 +17,7 @@ from .models import Article
 
 
 
-class ArticleViewset(viewsets.ViewSet):
+class ArticleViewset(viewsets.ModelViewSet):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
     
-    def list(self, request):
-        queryset = Article.objects.all()
-        serializer = ArticleSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def retrieve(self, request, pk=None):
-        article = get_object_or_404(Article, pk=pk)
-        serializer = ArticleSerializer(article)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def create(self, request):
-        serializer = ArticleSerializer(data=request.data)
-        if serializer.is_valid():
-            Article.objects.create(
-                title=serializer.validated_data['title'],
-                slug=slugify(serializer.validated_data['title']),
-                writer=User.objects.get(id=1),
-                body=serializer.validated_data['body'],
-            )
-            return Response({'messages': 'Ok'}, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def updated(self, request, pk):
-        artice = get_object_or_404(Article, pk=pk)
-        serializer = ArticleSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'messages': 'Ok'}, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def partial_update(self, request, pk=None):
-        pass
-
-    def destroy(self, request, pk=None):
-        pass
-        

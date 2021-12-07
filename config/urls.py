@@ -9,10 +9,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls', namespace='blog')),
     path('accounts/', include('accounts.urls', namespace='accounts')),
-    path('api/', include(router.urls)),
 ]
 
 # API
 urlpatterns += [
+    path('api/', include(router.urls)),
     path('api-token-auth/', obtain_auth_token)
 ]
