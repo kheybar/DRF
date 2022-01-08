@@ -3,9 +3,12 @@ from .models import Article
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+
+    category = serializers.StringRelatedField()
+
     class Meta:
         model = Article
-        fields = ('id', 'writer', 'title', 'slug', 'body')
+        fields = ('id', 'writer', 'title', 'category', 'slug', 'body')
         extra_tags = {
             'id': {'read_only': True}
         }

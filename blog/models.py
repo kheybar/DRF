@@ -4,11 +4,9 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 
-
 class PublishedArticleManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(status='publish')
-
 
 
 class Article(models.Model):
@@ -19,6 +17,7 @@ class Article(models.Model):
     )
 
     title = models.CharField(max_length=150, unique=True)
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, default=None, null=True)
     slug = models.SlugField(max_length=150, unique=True)
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.TextField(verbose_name='متن مقاله')
@@ -40,3 +39,10 @@ class Article(models.Model):
 
     def writer_name(self):
         return f'{self.writer.first_name} {self.writer.last_name}'
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
