@@ -141,9 +141,10 @@ LOGIN_REDIRECT_URL = 'blog:all_articles'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_THROTTLE_CLASSES': (
         'rest_framework.throttling.AnonRateThrottle',
@@ -152,8 +153,8 @@ REST_FRAMEWORK = {
         # 'rest_framework.throttling.ScopedRateThrottle',
     ),
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '1/minute',
-        'user': '3/minute',
+        'anon': '1000/minute',
+        'user': '3000/minute',
         # scope
         # 'article_throttle': '1000/day',
         # 'post_throttle': '20/day',

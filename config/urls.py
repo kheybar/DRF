@@ -14,5 +14,6 @@ urlpatterns = [
 # API
 urlpatterns += [
     path('api/', include(router.urls)),
-    path('api-token-auth/', obtain_auth_token)
+    path('api-token-auth/', obtain_auth_token),
+    path('api-session/', include('rest_framework.urls'))
 ]
