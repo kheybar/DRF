@@ -145,4 +145,17 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+        # scope
+        # 'rest_framework.throttling.ScopedRateThrottle',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '1/minute',
+        'user': '3/minute',
+        # scope
+        # 'article_throttle': '1000/day',
+        # 'post_throttle': '20/day',
+    }
 }
